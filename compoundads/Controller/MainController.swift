@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import Charts
+import GoogleMobileAds
 
 class MainController: UIViewController, ChartViewDelegate {
     
@@ -135,9 +136,9 @@ class MainController: UIViewController, ChartViewDelegate {
     let yielSlider: UISlider = {
         let yiel = UISlider()
         yiel.tintColor = mainColor
-        yiel.minimumValue = 0
+        yiel.minimumValue = 1
         yiel.maximumValue = 50
-        yiel.value = 7
+        yiel.value = 12
         yiel.tag = 2
         
         return yiel
@@ -161,7 +162,7 @@ class MainController: UIViewController, ChartViewDelegate {
     let yearSlider: UISlider = {
         let year = UISlider()
         year.tintColor = mainColor
-        year.minimumValue = 0
+        year.minimumValue = 1
         year.maximumValue = 100
         year.value = 25
         year.tag = 3
@@ -190,16 +191,28 @@ class MainController: UIViewController, ChartViewDelegate {
     var time: Int?
     
     var dataSetArray = [BarChartDataEntry]()
+    
+    var bannerView: GADBannerView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBannerAd()
         setupView()
         compound(principal: Double(principalSlider.value), rate: Double(yielSlider.value) / 100.0, time: Int(yearSlider.value), month: Double(monthlySlider.value))
     }
     
-    @objc func sliderValueDidChange(_ sender: UISlider) {
+    func setupBannerAd() {
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        bannerView.adUnitID = "ca-app-pub-6662079405759550/2407669165"
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
         
-        let principalStep: Float = 500.0
+        view.addSubview(bannerView)
+        _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+    }
+    
+    @objc func sliderValueDidChange(_ sender: UISlider) {
+        let principalStep: Float = 100.0
         let value = Int(sender.value)
         let pricipalValue = round(sender.value / principalStep) * principalStep
         
@@ -259,7 +272,7 @@ class MainController: UIViewController, ChartViewDelegate {
         
         let arrayCount = dataSetArray.count
         let lastItem = dataSetArray[arrayCount - 1].y
-        let dipositAmount = Double(principalData.text!)! + Double(monthlyData.text!)! * Double(yearData.text!)!
+        let dipositAmount = Double(principalData.text!)! + Double(monthlyData.text!)! * Double(yearData.text!)! * 12.0
 
         totalAmount.text = numberFormatter(number: lastItem)
         deposit.text = numberFormatter(number: dipositAmount)
@@ -273,72 +286,78 @@ class MainController: UIViewController, ChartViewDelegate {
         
         return numberFormatter.string(from: NSNumber(value: number))!
     }
-
-    private func setupView() {
-        view.backgroundColor = .white
+    
+    func portraitUI(margin: CGFloat, chartHeight: CGFloat) {
         
-        let margin = view.frame.width / 20
+        _ = barChart.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: chartHeight)
         
-        view.addSubview(barChart)
-        _ = barChart.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: margin * 12)
-        
-//        amonut text
-        view.addSubview(totalAmountText)
-        view.addSubview(totalAmount)
         _ = totalAmountText.anchor(barChart.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = totalAmount.anchor(totalAmountText.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         
-//        deporit text
-        view.addSubview(depositText)
-        view.addSubview(deposit)
         _ = depositText.anchor(totalAmountText.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = deposit.anchor(depositText.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         
-//        yield text
-        view.addSubview(yielText)
-        view.addSubview(yiel)
         _ = yielText.anchor(depositText.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = yiel.anchor(yielText.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         
-//        Monthly deposit items
-        view.addSubview(monthlySlider)
-        view.addSubview(monthlyTitel)
-        view.addSubview(monthlyData)
-        
-        _ = monthlySlider.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: nil, topConstant: 0, leftConstant: margin, bottomConstant: margin, rightConstant: 0, widthConstant: margin * 8, heightConstant: 0)
+        _ = monthlySlider.anchor(nil, left: view.leftAnchor, bottom: bannerView.topAnchor, right: nil, topConstant: 0, leftConstant: margin, bottomConstant: margin, rightConstant: 0, widthConstant: margin * 8, heightConstant: 0)
         _ = monthlyTitel.anchor(nil, left: monthlySlider.leftAnchor, bottom: monthlySlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = monthlyData.anchor(nil, left: nil, bottom: monthlySlider.topAnchor, right: monthlySlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        
-//        prospect items
-        view.addSubview(principalSlider)
-        view.addSubview(principalTitel)
-        view.addSubview(principalData)
         
         _ = principalSlider.anchor(nil, left: view.leftAnchor, bottom: monthlyTitel.topAnchor, right: nil, topConstant: 0, leftConstant: margin, bottomConstant: margin, rightConstant: 0, widthConstant: margin * 8, heightConstant: 0)
         _ = principalTitel.anchor(nil, left: principalSlider.leftAnchor, bottom: principalSlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = principalData.anchor(nil, left: nil, bottom: principalSlider.topAnchor, right: principalSlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
-        
-//        yeat items
-        view.addSubview(yearSlider)
-        view.addSubview(yearTitel)
-        view.addSubview(yearData)
-        
-        _ = yearSlider.anchor(nil, left: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin, rightConstant: margin, widthConstant: margin * 8, heightConstant: 0)
+        _ = yearSlider.anchor(nil, left: nil, bottom: bannerView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin, rightConstant: margin, widthConstant: margin * 8, heightConstant: 0)
         _ = yearTitel.anchor(nil, left: yearSlider.leftAnchor, bottom: yearSlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = yearData.anchor(nil, left: nil, bottom: yearSlider.topAnchor, right: yearSlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        
-        
-//        yield items
-        view.addSubview(yielSlider)
-        view.addSubview(yielTitel)
-        view.addSubview(yielData)
         
         _ = yielSlider.anchor(nil, left: nil, bottom: yearTitel.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin, rightConstant: margin, widthConstant: margin * 8, heightConstant: 0)
         _ = yielTitel.anchor(nil, left: yielSlider.leftAnchor, bottom: yielSlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = yielData.anchor(nil, left: nil, bottom: yielSlider.topAnchor, right: yielSlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
+        smalliPhoneSetup()
         
+        view.layoutIfNeeded()
+    }
+
+    private func setupView() {
+        view.backgroundColor = .white
+        
+        view.addSubview(barChart)
+        
+//        amonut text
+        view.addSubview(totalAmountText)
+        view.addSubview(totalAmount)
+        
+//        deporit text
+        view.addSubview(depositText)
+        view.addSubview(deposit)
+        
+//        yield text
+        view.addSubview(yielText)
+        view.addSubview(yiel)
+        
+//        Monthly deposit items
+        view.addSubview(monthlySlider)
+        view.addSubview(monthlyTitel)
+        view.addSubview(monthlyData)
+
+//        prospect items
+        view.addSubview(principalSlider)
+        view.addSubview(principalTitel)
+        view.addSubview(principalData)
+    
+//        yeat items
+        view.addSubview(yearSlider)
+        view.addSubview(yearTitel)
+        view.addSubview(yearData)
+
+//        yield items
+        view.addSubview(yielSlider)
+        view.addSubview(yielTitel)
+        view.addSubview(yielData)
+
         principalSlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
         monthlySlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
         yearSlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
@@ -347,8 +366,29 @@ class MainController: UIViewController, ChartViewDelegate {
         monthlyData.text = "\(Int(monthlySlider.value))"
         yielData.text = "\(Int(yielSlider.value))"
         yearData.text = "\(Int(yearSlider.value))"
-        
+    
+        let margin = view.frame.width / 20
+        let chartHeight = margin * 12
+        portraitUI(margin: margin, chartHeight: chartHeight)
+
         setupNavBar()
+    }
+    
+    private func smalliPhoneSetup() {
+        if iPhoneSE.contains(deviceModel) {
+            let margin = view.frame.width / 20
+            
+            _ = totalAmountText.anchor(barChart.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: margin / 2, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+            _ = depositText.anchor(totalAmountText.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin / 2, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+            _ = yielText.anchor(depositText.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin / 2, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+            
+            totalAmountText.font = UIFont(name: GILL_SANS, size: 16)!
+            totalAmount.font = UIFont(name: GILL_SANS, size: 16)!
+            depositText.font = UIFont(name: GILL_SANS, size: 16)!
+            deposit.font = UIFont(name: GILL_SANS, size: 16)!
+            yielText.font = UIFont(name: GILL_SANS, size: 16)!
+            yiel.font = UIFont(name: GILL_SANS, size: 16)!
+        }
     }
     
     private func setupNavBar() {

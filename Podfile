@@ -8,5 +8,7 @@ target 'compoundads' do
   # Pods for compoundads
 
 pod 'Charts'
+pod 'Google-Mobile-Ads-SDK'
+
 
 end
