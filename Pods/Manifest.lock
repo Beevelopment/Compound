@@ -3,20 +3,24 @@ PODS:
     - Charts/Core (= 3.2.1)
   - Charts/Core (3.2.1)
   - Google-Mobile-Ads-SDK (7.37.0)
+  - lottie-ios (2.5.2)
 
 DEPENDENCIES:
   - Charts
   - Google-Mobile-Ads-SDK
+  - lottie-ios
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Charts
     - Google-Mobile-Ads-SDK
+    - lottie-ios
 
 SPEC CHECKSUMS:
   Charts: f122fb70b19847fa5817d018b77d6c5a2296ab25
   Google-Mobile-Ads-SDK: d028682d7450749a1955679da050eaf70d997b3e
+  lottie-ios: 3fef45d3fabe63e3c7c2eb603dd64ddfffc73062
 
-PODFILE CHECKSUM: 91b714a0150d32bab480a2cc3f2ea9594c3d3a7a
+PODFILE CHECKSUM: fb9f5a668c90201853a245dae8b13d5aace319eb
 
 COCOAPODS: 1.5.3

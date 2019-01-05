@@ -12,6 +12,15 @@
 		594AFDE821DA3A5D00C6F897 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 594AFDE621DA3A5D00C6F897 /* Main.storyboard */; };
 		594AFDEA21DA3A5E00C6F897 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 594AFDE921DA3A5E00C6F897 /* Assets.xcassets */; };
 		594AFDED21DA3A5E00C6F897 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 594AFDEB21DA3A5E00C6F897 /* LaunchScreen.storyboard */; };
+		5983583E21E0FBF500AF159F /* GuideController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5983583D21E0FBF500AF159F /* GuideController.swift */; };
+		5983584021E1006100AF159F /* pig.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983583F21E1006100AF159F /* pig.json */; };
+		5983584221E100CC00AF159F /* fallingcoin.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983584121E100CC00AF159F /* fallingcoin.json */; };
+		5983584621E104D300AF159F /* chart.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983584521E104D300AF159F /* chart.json */; };
+		5983584A21E1076100AF159F /* PageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5983584921E1076100AF159F /* PageCell.swift */; };
+		5983584E21E10BA000AF159F /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5983584D21E10BA000AF159F /* Page.swift */; };
+		5983585521E11D5000AF159F /* done.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983585321E11D5000AF159F /* done.json */; };
+		5983585A21E1269200AF159F /* edu.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983585921E1269200AF159F /* edu.json */; };
+		59C5E34421DFED7F00C73AC2 /* FourProcentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */; };
 		59D4DFCF21DA3C9A00528750 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4DFCE21DA3C9A00528750 /* Extension.swift */; };
 		59D4DFD821DA4D1400528750 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4DFD721DA4D1400528750 /* Constants.swift */; };
 		5C61DE448F20978D43824F7A /* Pods_compoundads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470BBB04F3B38B6EF7DB92C6 /* Pods_compoundads.framework */; };
@@ -27,6 +36,15 @@
 		594AFDE921DA3A5E00C6F897 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		594AFDEC21DA3A5E00C6F897 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		594AFDEE21DA3A5E00C6F897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5983583D21E0FBF500AF159F /* GuideController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideController.swift; sourceTree = "<group>"; };
+		5983583F21E1006100AF159F /* pig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pig.json; sourceTree = "<group>"; };
+		5983584121E100CC00AF159F /* fallingcoin.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fallingcoin.json; sourceTree = "<group>"; };
+		5983584521E104D300AF159F /* chart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chart.json; sourceTree = "<group>"; };
+		5983584921E1076100AF159F /* PageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCell.swift; sourceTree = "<group>"; };
+		5983584D21E10BA000AF159F /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		5983585321E11D5000AF159F /* done.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = done.json; sourceTree = "<group>"; };
+		5983585921E1269200AF159F /* edu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = edu.json; sourceTree = "<group>"; };
+		59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourProcentController.swift; sourceTree = "<group>"; };
 		59D4DFCE21DA3C9A00528750 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		59D4DFD721DA4D1400528750 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6F09CC8CF33D2E46B60D5B03 /* Pods-compoundads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-compoundads.release.xcconfig"; path = "Pods/Target Support Files/Pods-compoundads/Pods-compoundads.release.xcconfig"; sourceTree = "<group>"; };
@@ -65,9 +83,11 @@
 		594AFDE121DA3A5D00C6F897 /* compoundads */ = {
 			isa = PBXGroup;
 			children = (
-				59D4DFD321DA416900528750 /* Model */,
 				59D4DFD121DA3CB900528750 /* Controller */,
+				5983584C21E10B9000AF159F /* View */,
+				5983584B21E107C000AF159F /* Model */,
 				59D4DFD021DA3CB100528750 /* Util */,
+				5983583A21E0FBBE00AF159F /* Animations */,
 				594AFDE221DA3A5D00C6F897 /* AppDelegate.swift */,
 				594AFDE621DA3A5D00C6F897 /* Main.storyboard */,
 				594AFDEB21DA3A5E00C6F897 /* LaunchScreen.storyboard */,
@@ -75,6 +95,34 @@
 				594AFDE921DA3A5E00C6F897 /* Assets.xcassets */,
 			);
 			path = compoundads;
+			sourceTree = "<group>";
+		};
+		5983583A21E0FBBE00AF159F /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				5983584121E100CC00AF159F /* fallingcoin.json */,
+				5983584521E104D300AF159F /* chart.json */,
+				5983585321E11D5000AF159F /* done.json */,
+				5983585921E1269200AF159F /* edu.json */,
+				5983583F21E1006100AF159F /* pig.json */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		5983584B21E107C000AF159F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5983584D21E10BA000AF159F /* Page.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5983584C21E10B9000AF159F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5983584921E1076100AF159F /* PageCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		59D4DFD021DA3CB100528750 /* Util */ = {
@@ -90,15 +138,10 @@
 			isa = PBXGroup;
 			children = (
 				594AFDE421DA3A5D00C6F897 /* MainController.swift */,
+				59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */,
+				5983583D21E0FBF500AF159F /* GuideController.swift */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		59D4DFD321DA416900528750 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9207BEE1CC21D9BB15A683BC /* Pods */ = {
@@ -179,8 +222,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				594AFDED21DA3A5E00C6F897 /* LaunchScreen.storyboard in Resources */,
+				5983584621E104D300AF159F /* chart.json in Resources */,
+				5983584221E100CC00AF159F /* fallingcoin.json in Resources */,
 				594AFDEA21DA3A5E00C6F897 /* Assets.xcassets in Resources */,
+				5983584021E1006100AF159F /* pig.json in Resources */,
 				594AFDE821DA3A5D00C6F897 /* Main.storyboard in Resources */,
+				5983585A21E1269200AF159F /* edu.json in Resources */,
+				5983585521E11D5000AF159F /* done.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,10 +243,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-compoundads/Pods-compoundads-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -230,10 +280,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59C5E34421DFED7F00C73AC2 /* FourProcentController.swift in Sources */,
 				59D4DFCF21DA3C9A00528750 /* Extension.swift in Sources */,
+				5983584E21E10BA000AF159F /* Page.swift in Sources */,
 				594AFDE521DA3A5D00C6F897 /* MainController.swift in Sources */,
 				594AFDE321DA3A5D00C6F897 /* AppDelegate.swift in Sources */,
+				5983583E21E0FBF500AF159F /* GuideController.swift in Sources */,
 				59D4DFD821DA4D1400528750 /* Constants.swift in Sources */,
+				5983584A21E1076100AF159F /* PageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,3 +20,5 @@ let GILL_SANS_SEMIBOLD = "GillSans-SemiBold"
 let GILL_SANS_SEMIBOLD_ITALIC = "GillSans-SemiBoldItalic"
 let GILL_SANS_ULTRABOLD = "GillSans-UltraBold"
 let GILL_SANS = "GillSans"
+
+let firstTime = "firstTime"

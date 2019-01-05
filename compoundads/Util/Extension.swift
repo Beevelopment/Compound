@@ -8,6 +8,14 @@
 
 import UIKit
 
+func numberFormatter(number: Double) -> String {
+    let numberFormatter = NumberFormatter()
+    numberFormatter.numberStyle = .currency
+    numberFormatter.locale = Locale.current
+    
+    return numberFormatter.string(from: NSNumber(value: number))!
+}
+
 extension UIView {
     func setGradientColor(colorOne: UIColor, colorTwo: UIColor) {
         let gardientLayer = CAGradientLayer()

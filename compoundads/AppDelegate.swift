@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         window?.rootViewController = UINavigationController(rootViewController: MainController())
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: GILL_SANS, size: 21)!, NSAttributedString.Key.foregroundColor: mainColor], for: .normal)
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6662079405759550~6777147258")
         

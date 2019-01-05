@@ -13,6 +13,24 @@ import GoogleMobileAds
 
 class MainController: UIViewController, ChartViewDelegate {
     
+    let fourProcentButton: UIButton = {
+        let four = UIButton(type: .system)
+        four.setImage(UIImage(named: "dollar"), for: .normal)
+        four.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        four.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        return four
+    }()
+    
+    let guideButton: UIButton = {
+        let guide = UIButton(type: .system)
+        guide.setImage(UIImage(named: "guide"), for: .normal)
+        guide.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        guide.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        return guide
+    }()
+    
     lazy var barChart: BarChartView = {
         let bar = BarChartView()
         bar.legend.enabled = false
@@ -199,6 +217,15 @@ class MainController: UIViewController, ChartViewDelegate {
         setupBannerAd()
         setupView()
         compound(principal: Double(principalSlider.value), rate: Double(yielSlider.value) / 100.0, time: Int(yearSlider.value), month: Double(monthlySlider.value))
+        
+        if !UserDefaults.standard.bool(forKey: firstTime) {
+            showGuide()
+        }
+    }
+    
+    @objc private func showGuide() {
+        let guideController = GuideController()
+        present(guideController, animated: true, completion: nil)
     }
     
     func setupBannerAd() {
@@ -211,22 +238,30 @@ class MainController: UIViewController, ChartViewDelegate {
         _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
     }
     
-    @objc func sliderValueDidChange(_ sender: UISlider) {
+    @objc func sliderValueDidChange(_ sender: UISlider, event: UIEvent) {
         let principalStep: Float = 100.0
         let value = Int(sender.value)
         let pricipalValue = round(sender.value / principalStep) * principalStep
         
-        if sender.tag == 0 {
-            principalData.text = "\(Int(pricipalValue))"
-        } else if sender.tag == 1 {
-            monthlyData.text = "\(Int(pricipalValue))"
-        } else if sender.tag == 2 {
-            yielData.text = "\(value)"
-        } else if sender.tag == 3 {
-            yearData.text = "\(value)"
+        if let touchEvent = event.allTouches?.first {
+            switch touchEvent.phase {
+            case .moved:
+                if sender.tag == 0 {
+                    principalData.text = "\(Int(pricipalValue))"
+                } else if sender.tag == 1 {
+                    monthlyData.text = "\(Int(pricipalValue))"
+                } else if sender.tag == 2 {
+                    yielData.text = "\(value)"
+                } else if sender.tag == 3 {
+                    yearData.text = "\(value)"
+                }
+            case .ended:
+                compound(principal: Double(principalData.text!)!, rate: Double(yielData.text!)! / 100.0, time: Int(yearData.text!)!, month: Double(monthlyData.text!)!)
+            default:
+                break
+            }
         }
         
-        compound(principal: Double(principalData.text!)!, rate: Double(yielData.text!)! / 100.0, time: Int(yearData.text!)!, month: Double(monthlyData.text!)!)
     }
     
     func compound(principal: Double, rate: Double, time: Int, month: Double) {
@@ -279,17 +314,9 @@ class MainController: UIViewController, ChartViewDelegate {
         yiel.text = numberFormatter(number: (lastItem - dipositAmount))
     }
     
-    func numberFormatter(number: Double) -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        numberFormatter.locale = Locale.current
-        
-        return numberFormatter.string(from: NSNumber(value: number))!
-    }
-    
     func portraitUI(margin: CGFloat, chartHeight: CGFloat) {
         
-        _ = barChart.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: chartHeight)
+        _ = barChart.anchor(view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: chartHeight)
         
         _ = totalAmountText.anchor(barChart.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = totalAmount.anchor(totalAmountText.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
@@ -320,48 +347,20 @@ class MainController: UIViewController, ChartViewDelegate {
         
         view.layoutIfNeeded()
     }
+    
+    @objc private func showFourProcentController() {
+        let fourProcentController = FourProcentController()
+        fourProcentController.title = "The 4% Rule"
+        fourProcentController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: mainColor, NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 28)!]
+        navigationController?.pushViewController(fourProcentController, animated: true)
+    }
 
     private func setupView() {
         view.backgroundColor = .white
         
-        view.addSubview(barChart)
+        [barChart, totalAmountText, totalAmount, depositText, deposit, yielText, yiel, monthlySlider, monthlyTitel, monthlyData, principalSlider, principalTitel, principalData, yearSlider, yearTitel, yearData, yielSlider, yielTitel, yielData].forEach { view.addSubview($0) }
         
-//        amonut text
-        view.addSubview(totalAmountText)
-        view.addSubview(totalAmount)
-        
-//        deporit text
-        view.addSubview(depositText)
-        view.addSubview(deposit)
-        
-//        yield text
-        view.addSubview(yielText)
-        view.addSubview(yiel)
-        
-//        Monthly deposit items
-        view.addSubview(monthlySlider)
-        view.addSubview(monthlyTitel)
-        view.addSubview(monthlyData)
-
-//        prospect items
-        view.addSubview(principalSlider)
-        view.addSubview(principalTitel)
-        view.addSubview(principalData)
-    
-//        yeat items
-        view.addSubview(yearSlider)
-        view.addSubview(yearTitel)
-        view.addSubview(yearData)
-
-//        yield items
-        view.addSubview(yielSlider)
-        view.addSubview(yielTitel)
-        view.addSubview(yielData)
-
-        principalSlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
-        monthlySlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
-        yearSlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
-        yielSlider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
+        [principalSlider, monthlySlider, yearSlider, yielSlider].forEach { $0.addTarget(self, action: #selector(sliderValueDidChange(_:event:)), for: .valueChanged) }
         
         monthlyData.text = "\(Int(monthlySlider.value))"
         yielData.text = "\(Int(yielSlider.value))"
@@ -394,9 +393,16 @@ class MainController: UIViewController, ChartViewDelegate {
     private func setupNavBar() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = mainColor
         
         title = "Compound"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: mainColor, NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 28)!]
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: fourProcentButton)
+        fourProcentButton.addTarget(self, action: #selector(showFourProcentController), for: .touchUpInside)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: guideButton)
+        guideButton.addTarget(self, action: #selector(showGuide), for: .touchUpInside)
     }
 }
 

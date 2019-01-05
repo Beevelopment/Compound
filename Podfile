@@ -9,6 +9,7 @@ target 'compoundads' do
 
 pod 'Charts'
 pod 'Google-Mobile-Ads-SDK'
+pod 'lottie-ios'
 
 
 end
