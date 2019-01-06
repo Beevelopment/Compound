@@ -32,11 +32,11 @@ class GuideController: UIViewController, UICollectionViewDelegateFlowLayout, UIC
     var pageCell: PageCell?
     
     let pages: [Page] = {
-        let firstPage = Page(animationName: "pig", title: "Compound Plus", message: "With Compound Plus you will learn the meaning and power of compound interest and the 4% rule.")
+        let firstPage = Page(animationName: "pig", title: "Compound Plus", message: "With Compound Plus you will learn the meaning and power of compound interest and the 4% rule with dividend.")
         let secondPage = Page(animationName: "chart", title: "Compound Interest", message: "Every successful person understands the power of compounding and now you will to. Learn  how different factors will affect your future wealth.")
         let thirdPage = Page(animationName: "fallingcoin", title: "The 4% Rule", message: "This rule shows how much capital you need invested in dividend stocks to live of it, based on the average dividend rate.")
-        let fourthPage = Page(animationName: "edu", title: "Knowledge is Power ", message: "You will learn about how compounding works and why it’s called the 8th wonder of the world by Albert Einstein and much more.")
-        let fithPage = Page(animationName: "done", title: "Introduction Finished", message: "Touch screen to continue")
+        let fourthPage = Page(animationName: "edu", title: "Knowledge is Power ", message: "You will learn about how compounding works and why it’s called the 8th wonder of the world by Albert Einstein and more.")
+        let fithPage = Page(animationName: "done", title: "Introduction Finished", message: "Touch the screen to continue")
         
         return [firstPage, secondPage, thirdPage, fourthPage, fithPage]
     }()

@@ -10,6 +10,6 @@ target 'compoundads' do
 pod 'Charts'
 pod 'Google-Mobile-Ads-SDK'
 pod 'lottie-ios'
-
+pod 'FacebookCore'
 
 end

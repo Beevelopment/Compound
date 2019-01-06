@@ -10,8 +10,17 @@ import UIKit
 import Foundation
 import Charts
 import GoogleMobileAds
+import Lottie
 
 class MainController: UIViewController, ChartViewDelegate {
+    
+    let logoView: UIImageView = {
+        let logo = UIImageView()
+        logo.contentMode = .scaleAspectFit
+        logo.image = UIImage(named: "graph")
+        
+        return logo
+    }()
     
     let fourProcentButton: UIButton = {
         let four = UIButton(type: .system)
@@ -22,13 +31,22 @@ class MainController: UIViewController, ChartViewDelegate {
         return four
     }()
     
-    let guideButton: UIButton = {
-        let guide = UIButton(type: .system)
-        guide.setImage(UIImage(named: "guide"), for: .normal)
-        guide.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        guide.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    let menuButton: UIButton = {
+        let menu = UIButton(type: .system)
+        menu.setImage(UIImage(named: "menu"), for: .normal)
+        menu.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        menu.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        return guide
+        return menu
+    }()
+    
+    let educationButton: UIButton = {
+        let education = UIButton(type: .system)
+        education.setImage(UIImage(named: "book"), for: .normal)
+        education.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        education.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        return education
     }()
     
     lazy var barChart: BarChartView = {
@@ -203,14 +221,45 @@ class MainController: UIViewController, ChartViewDelegate {
         return year
     }()
     
+    let animation: LOTAnimationView = {
+        let ani = LOTAnimationView()
+        ani.setAnimation(named: "loading")
+        ani.isHidden = true
+        ani.loopAnimation = true
+        
+        return ani
+    }()
+    
+    let visualEffectView: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .extraLight)
+        let visual = UIVisualEffectView(effect: blur)
+        visual.isHidden = true
+        
+        return visual
+    }()
+    
     var principal: Double?
     var monthlyDeposit: Double?
     var rate: Double?
     var time: Int?
+    let titleView = UIView()
     
     var dataSetArray = [BarChartDataEntry]()
-    
     var bannerView: GADBannerView!
+    
+    lazy var eduLauncher: EduLauncher = {
+        let eduLauncher = EduLauncher()
+        eduLauncher.mainController = self
+        
+        return eduLauncher
+    }()
+    
+    lazy var menuLauncher: MenuLauncher = {
+        let menuLauncher = MenuLauncher()
+        menuLauncher.mainController = self
+        
+        return menuLauncher
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -223,19 +272,38 @@ class MainController: UIViewController, ChartViewDelegate {
         }
     }
     
-    @objc private func showGuide() {
+    func showGuide() {
         let guideController = GuideController()
         present(guideController, animated: true, completion: nil)
     }
     
+    func shareApplication() {
+        var shareApplication = [String]()
+        let text = "Install Compound Plus Now!"
+        let iTunesLink = "https://itunes.apple.com/us/developer/carl-henningsson/id1203904200?mt=8"
+        shareApplication = [text, iTunesLink]
+        
+        let activityController = UIActivityViewController(activityItems: shareApplication, applicationActivities: nil)
+        
+        if iPadArray.contains(deviceModel) {
+            guard let popOver = activityController.popoverPresentationController else { return }
+            popOver.sourceView = self.view
+            present(activityController, animated: true, completion: nil)
+        } else {
+            present(activityController, animated: true, completion: nil)
+        }
+    }
+    
     func setupBannerAd() {
         bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        bannerView.adUnitID = "ca-app-pub-6662079405759550/2407669165"
+        bannerView.adUnitID = bannerAdID
         bannerView.rootViewController = self
-        bannerView.load(GADRequest())
         
-        view.addSubview(bannerView)
-        _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
+            bannerView.load(GADRequest())
+        } else {
+            return
+        }
     }
     
     @objc func sliderValueDidChange(_ sender: UISlider, event: UIEvent) {
@@ -354,13 +422,54 @@ class MainController: UIViewController, ChartViewDelegate {
         fourProcentController.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: mainColor, NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 28)!]
         navigationController?.pushViewController(fourProcentController, animated: true)
     }
+    
+    @objc func showVideoLauncer() {
+        eduLauncher.titleView.text = "What is Compound Interest"
+        eduLauncher.textView.text = "Compound interest (or compounding interest) is interest calculated on the initial principal and which also includes all of the accumulated interest of previous periods of a deposit or loan. Thought to have originated in 17th century Italy, compound interest can be thought of as “interest on interest,” and will make a sum grow at a faster rate than simple interest, which is calculated only on the principal amount. The rate at which compound interest accrues depends on the frequency of compounding such that the higher the number of compounding periods, the greater the compound interest. Thus, the amount of compound interest accrued on $100 compounded at 10% annually will be lower than that on $100 compounded at 5% semi-annually over the same time period. Because the interest-on-interest effect can generate increasingly positive returns based on the initial principal amount, it has sometimes been referred to as the \"miracle of compound interest.\""
+        eduLauncher.videoURL = "https://www.youtube.com/embed/wf91rEGw88Q"
+        eduLauncher.showVideoLuncher()
+    }
+    
+    @objc func showMenuLauncher() {
+        menuLauncher.showMenu()
+    }
+    
+    func handleIAP() {
+        
+        visualEffectView.isHidden = false
+        animation.isHidden = false
+        animation.play()
+        
+        var count = 0
+        
+        PurchaseManager.instance.purchaseRemoveAds { success in
+            if success {
+                self.bannerView.isHidden = true
+                self.animation.stop()
+                self.animation.isHidden = true
+                self.visualEffectView.isHidden = true
+            } else {
+                count += 1
+                if count == 2 {
+                    self.animation.stop()
+                    self.animation.isHidden = true
+                    self.visualEffectView.isHidden = true
+                    self.alertNotification(titel: "Unable to purchase \"Remove Ads\"", message: "The application was unable to complete the purchase of \"Remove Ads\". Please try again.")
+                }
+            }
+        }
+    }
 
     private func setupView() {
         view.backgroundColor = .white
         
-        [barChart, totalAmountText, totalAmount, depositText, deposit, yielText, yiel, monthlySlider, monthlyTitel, monthlyData, principalSlider, principalTitel, principalData, yearSlider, yearTitel, yearData, yielSlider, yielTitel, yielData].forEach { view.addSubview($0) }
+        [bannerView, barChart, totalAmountText, totalAmount, depositText, deposit, yielText, yiel, monthlySlider, monthlyTitel, monthlyData, principalSlider, principalTitel, principalData, yearSlider, yearTitel, yearData, yielSlider, yielTitel, yielData, visualEffectView, animation].forEach { view.addSubview($0) }
         
         [principalSlider, monthlySlider, yearSlider, yielSlider].forEach { $0.addTarget(self, action: #selector(sliderValueDidChange(_:event:)), for: .valueChanged) }
+        
+        _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        _ = visualEffectView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        animation.frame = CGRect(x: view.frame.width / 2 - 100, y: view.frame.height / 2 - 100, width: 200, height: 200)
         
         monthlyData.text = "\(Int(monthlySlider.value))"
         yielData.text = "\(Int(yielSlider.value))"
@@ -395,14 +504,30 @@ class MainController: UIViewController, ChartViewDelegate {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = mainColor
         
-        title = "Compound"
+        titleView.frame = CGRect(x: 60, y: 0, width: view.frame.width - 120, height: 35)
+        logoView.frame = titleView.bounds
+        titleView.addSubview(logoView)
+        navigationItem.titleView = titleView
+        
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: mainColor, NSAttributedString.Key.font: UIFont(name: "GillSans-Bold", size: 28)!]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: fourProcentButton)
+        let educationBarButton = UIBarButtonItem(customView: educationButton)
+        let fourProcentBarButton = UIBarButtonItem(customView: fourProcentButton)
+        
+        menuButton.addTarget(self, action: #selector(showMenuLauncher), for: .touchUpInside)
+        educationButton.addTarget(self, action: #selector(showVideoLauncer), for: .touchUpInside)
         fourProcentButton.addTarget(self, action: #selector(showFourProcentController), for: .touchUpInside)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: guideButton)
-        guideButton.addTarget(self, action: #selector(showGuide), for: .touchUpInside)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.rightBarButtonItems = [fourProcentBarButton, educationBarButton]
+    }
+    
+    func alertNotification(titel: String, message: String) {
+        let alert = UIAlertController(title: titel, message: message, preferredStyle: .alert)
+        let actionAlert = UIAlertAction(title: "Ok", style: .cancel)
+        
+        alert.addAction(actionAlert)
+        present(alert, animated: true, completion: nil)
     }
 }
 

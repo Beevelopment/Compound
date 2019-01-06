@@ -22,3 +22,8 @@ let GILL_SANS_ULTRABOLD = "GillSans-UltraBold"
 let GILL_SANS = "GillSans"
 
 let firstTime = "firstTime"
+let IAP_REMOVEADS = "com.hc.compoundads.removeads"
+
+//Ads
+let bannerAdID = "ca-app-pub-6662079405759550/2407669165"
+let interstitalAdID = "ca-app-pub-6662079405759550/6807741309"

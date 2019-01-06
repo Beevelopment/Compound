@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import GoogleMobileAds
 
 class FourProcentController: UIViewController {
     
@@ -15,6 +16,15 @@ class FourProcentController: UIViewController {
     let topElementContainer = UIView()
     
     var amountNoneFormattet: Double?
+    
+    let educationButton: UIButton = {
+        let education = UIButton(type: .system)
+        education.setImage(UIImage(named: "book"), for: .normal)
+        education.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        education.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        return education
+    }()
     
     let amountText: UILabel = {
         let total = UILabel()
@@ -174,10 +184,43 @@ class FourProcentController: UIViewController {
         return years
     }()
     
+    lazy var eduLauncher: EduLauncher = {
+        let eduLauncher = EduLauncher()
+        eduLauncher.fourProcentController = self
+        
+        return eduLauncher
+    }()
+    
+    var bannerView: GADBannerView!
+    var interstitial: GADInterstitial!
+    
+    var adShown = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBannerAd()
+        setupInterstitialAd()
         setupView()
+        setupNavbar()
+    }
+    
+    func setupBannerAd() {
+        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        bannerView.adUnitID = bannerAdID
+        bannerView.rootViewController = self
         
+        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
+            bannerView.load(GADRequest())
+        }
+    }
+    
+    func setupInterstitialAd() {
+        interstitial = GADInterstitial(adUnitID: interstitalAdID)
+        let request = GADRequest()
+        
+        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
+            interstitial.load(request)
+        }
     }
     
     @objc func sliderChangedValue(_ sender: UISlider, event: UIEvent) {
@@ -191,6 +234,15 @@ class FourProcentController: UIViewController {
         
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {
+            case .began:
+                if !adShown {
+                    if interstitial.isReady {
+                        interstitial.present(fromRootViewController: self)
+                        adShown = true
+                    } else {
+                        return
+                    }
+                }
             case .moved:
                 if sender.tag == 0 {
                     monthlyIncomeData.text = "\(Int(incomeValue))"
@@ -234,6 +286,13 @@ class FourProcentController: UIViewController {
         }
     }
     
+    @objc func showVideoLauncer() {
+        eduLauncher.titleView.text = "The\"Four Percent Rule\" for Dividend Investing in Retirement"
+        eduLauncher.textView.text = "The four percent rule is commonly used by financial planners in order to estimate the optimum amount of money to withdraw from client portfolios each year. The goal is to ensure longevity of client portfolios in retirement. Retirees are typically expected to sell a portion of their portfolios each year and adjust their withdrawals for inflation.\n\nThe possible reason for selecting 4% as a “safe” withdrawal strategy could be the fact that dividend yields have typically been around 4% on average for the decades covering the study.\n\nIn contrast, dividend investors tend to create portfolios which are concentrated around generating a sustainable income stream each year. By owning a diverse mix of income producing assets, dividend investors would ensure that a hiccup in one sector of the economy would not have lasting effects on their lifestyles in retirement.\n\nAnother positive of dividend portfolios is that investors tend to live off solely from the income that the basket of stocks produces each year. In contrast, the four percent rule contains an inherent risk because of the possibility of selling off portions of one's portfolio during a flat or down market, which could deplete the portfolios much faster, leaving retirees to rely solely on social security. By concentrating only on spending a portion of the income that the portfolio produces, investors are leaving their invested capital intact and letting it grow overtime. This is similar to having your cake and eating it too as well.\n\nThe research behind the four percent rule is still sound however, especially since index funds tended to yield approximately four percent on average over the study period. Thus I believe that a portfolio which yields between three and four percent would provide investors with adequate income for a lifetime. Even if one's income portfolio generates a starter yield which is higher than four percent, it would still be wise not to spend more than 4%. This would leave some room for maneuvering in case the income generating assets in the higher yielding portfolio cut distributions."
+        eduLauncher.videoURL = "https://www.youtube.com/embed/sP8uEdKVRvA"
+        eduLauncher.showVideoLuncher()
+    }
+    
     private func setupView() {
         view.backgroundColor = .white
         
@@ -251,7 +310,7 @@ class FourProcentController: UIViewController {
         [monthlyIncomeSlider, monthlyIncomeTitel, monthlyIncomeData, monthlyDepositSlider, monthlyDepositTitel, monthlyDepositData, yielSlider, yielTitel, yielData, principalSlider, principalTitel, principalData].forEach { middleElementContainer.addSubview($0) }
         
         bottomContainer.addSubview(bottomElementContainer)
-        [numberOfYearsText, numberOfYears].forEach { bottomElementContainer.addSubview($0) }
+        [numberOfYearsText, numberOfYears, bannerView].forEach { bottomElementContainer.addSubview($0) }
         
         _ = topContainer.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: heightContainer)
         _ = topElementContainer.anchor(topContainer.topAnchor, left: topContainer.leftAnchor, bottom: nil, right: topContainer.rightAnchor, topConstant: containerMargin * 43, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
@@ -278,12 +337,16 @@ class FourProcentController: UIViewController {
         _ = principalSlider.anchor(principalTitel.bottomAnchor, left: view.leftAnchor, bottom: middleElementContainer.bottomAnchor, right: view.rightAnchor, topConstant: margin, leftConstant: margin * 6, bottomConstant: 0, rightConstant: margin * 6, widthConstant: margin * 8, heightConstant: 0)
         
         _ = bottomContainer.anchor(middleContainer.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: heightContainer)
-        _ = bottomElementContainer.anchor(bottomContainer.topAnchor, left: bottomContainer.leftAnchor, bottom: nil, right: bottomContainer.rightAnchor, topConstant: containerMargin * 30, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
+        _ = bottomElementContainer.anchor(bottomContainer.topAnchor, left: bottomContainer.leftAnchor, bottom: nil, right: bottomContainer.rightAnchor, topConstant: containerMargin * 20, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         _ = numberOfYearsText.anchor(bottomElementContainer.topAnchor, left: bottomElementContainer.leftAnchor, bottom: nil, right: bottomElementContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = numberOfYears.anchor(numberOfYearsText.bottomAnchor, left: bottomElementContainer.leftAnchor, bottom: bottomElementContainer.bottomAnchor, right: bottomElementContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        _ = bannerView.anchor(nil, left: bottomContainer.leftAnchor, bottom: bottomContainer.safeAreaLayoutGuide.bottomAnchor, right: bottomContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         
         [monthlyDepositSlider, monthlyIncomeSlider, yielSlider, principalSlider].forEach { $0.addTarget(self, action: #selector(sliderChangedValue(_:event:)), for: .valueChanged) }
-        
-//        slider.addTarget(self, action: #selector(onSliderValChanged(slider:event:)), for: .valueChanged)
+    }
+    
+    func setupNavbar() {
+        educationButton.addTarget(self, action: #selector(showVideoLauncer), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: educationButton)
     }
 }

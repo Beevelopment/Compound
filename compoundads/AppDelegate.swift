@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMobileAds
+import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,8 +25,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-6662079405759550~6777147258")
         
+        FBSDKApplicationDelegate.sharedInstance()?.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        PurchaseManager.instance.fetchProducts()
+        
         // Override point for customization after application launch.
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
+        
+        return handled
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

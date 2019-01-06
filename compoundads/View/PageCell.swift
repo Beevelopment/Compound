@@ -11,13 +11,6 @@ import Lottie
 
 class PageCell: UICollectionViewCell {
     
-    lazy var guideController: GuideController = {
-        let gc = GuideController()
-        gc.pageCell = self
-        
-        return gc
-    }()
-    
     var page: Page? {
         didSet {
             guard let page = page else { return }
@@ -40,15 +33,8 @@ class PageCell: UICollectionViewCell {
             if page.animationName == "chart" {
                 animation.animationSpeed = 0.75
                 animation.autoReverseAnimation = true
-            } else if page.animationName == "done" {
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(test))
-                addGestureRecognizer(tapGesture)
             }
         }
-    }
-    
-    @objc func test() {
-        guideController.dismissIntroduction()
     }
     
     let animation: LOTAnimationView = {
@@ -75,8 +61,8 @@ class PageCell: UICollectionViewCell {
     func setupCell() {
         [animation, textView].forEach { addSubview($0) }
         
-        _ = animation.anchor(topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: frame.width / 5, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: frame.width / 2)
-        _ = textView.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: frame.width / 10, bottomConstant: 0, rightConstant: frame.width / 10, widthConstant: 0, heightConstant: frame.width)
+        _ = animation.anchor(topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, topConstant: frame.width / 4, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: frame.height / 4)
+        _ = textView.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: frame.width / 10, bottomConstant: 0, rightConstant: frame.width / 10, widthConstant: 0, heightConstant: frame.height / 2)
     }
     
     required init?(coder aDecoder: NSCoder) {

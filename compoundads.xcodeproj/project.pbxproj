@@ -20,6 +20,12 @@
 		5983584E21E10BA000AF159F /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5983584D21E10BA000AF159F /* Page.swift */; };
 		5983585521E11D5000AF159F /* done.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983585321E11D5000AF159F /* done.json */; };
 		5983585A21E1269200AF159F /* edu.json in Resources */ = {isa = PBXBuildFile; fileRef = 5983585921E1269200AF159F /* edu.json */; };
+		59A8157421E231C9009E860E /* EduLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A8157321E231C9009E860E /* EduLauncher.swift */; };
+		59C3E2C921E25F3400B4EA56 /* MenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3E2C821E25F3400B4EA56 /* MenuLauncher.swift */; };
+		59C3E2CB21E260D800B4EA56 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3E2CA21E260D800B4EA56 /* MenuCell.swift */; };
+		59C3E2CD21E2611900B4EA56 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3E2CC21E2611900B4EA56 /* Menu.swift */; };
+		59C3E2D021E2768800B4EA56 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C3E2CF21E2768800B4EA56 /* PurchaseManager.swift */; };
+		59C3E2D221E2873900B4EA56 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 59C3E2D121E2873900B4EA56 /* loading.json */; };
 		59C5E34421DFED7F00C73AC2 /* FourProcentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */; };
 		59D4DFCF21DA3C9A00528750 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4DFCE21DA3C9A00528750 /* Extension.swift */; };
 		59D4DFD821DA4D1400528750 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D4DFD721DA4D1400528750 /* Constants.swift */; };
@@ -44,6 +50,12 @@
 		5983584D21E10BA000AF159F /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		5983585321E11D5000AF159F /* done.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = done.json; sourceTree = "<group>"; };
 		5983585921E1269200AF159F /* edu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = edu.json; sourceTree = "<group>"; };
+		59A8157321E231C9009E860E /* EduLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EduLauncher.swift; sourceTree = "<group>"; };
+		59C3E2C821E25F3400B4EA56 /* MenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLauncher.swift; sourceTree = "<group>"; };
+		59C3E2CA21E260D800B4EA56 /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		59C3E2CC21E2611900B4EA56 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		59C3E2CF21E2768800B4EA56 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		59C3E2D121E2873900B4EA56 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourProcentController.swift; sourceTree = "<group>"; };
 		59D4DFCE21DA3C9A00528750 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		59D4DFD721DA4D1400528750 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -83,6 +95,7 @@
 		594AFDE121DA3A5D00C6F897 /* compoundads */ = {
 			isa = PBXGroup;
 			children = (
+				59C3E2CE21E2767500B4EA56 /* Services */,
 				59D4DFD121DA3CB900528750 /* Controller */,
 				5983584C21E10B9000AF159F /* View */,
 				5983584B21E107C000AF159F /* Model */,
@@ -104,6 +117,7 @@
 				5983584521E104D300AF159F /* chart.json */,
 				5983585321E11D5000AF159F /* done.json */,
 				5983585921E1269200AF159F /* edu.json */,
+				59C3E2D121E2873900B4EA56 /* loading.json */,
 				5983583F21E1006100AF159F /* pig.json */,
 			);
 			path = Animations;
@@ -113,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				5983584D21E10BA000AF159F /* Page.swift */,
+				59C3E2CC21E2611900B4EA56 /* Menu.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -121,8 +136,17 @@
 			isa = PBXGroup;
 			children = (
 				5983584921E1076100AF159F /* PageCell.swift */,
+				59C3E2CA21E260D800B4EA56 /* MenuCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		59C3E2CE21E2767500B4EA56 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				59C3E2CF21E2768800B4EA56 /* PurchaseManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		59D4DFD021DA3CB100528750 /* Util */ = {
@@ -140,6 +164,8 @@
 				594AFDE421DA3A5D00C6F897 /* MainController.swift */,
 				59C5E34321DFED7F00C73AC2 /* FourProcentController.swift */,
 				5983583D21E0FBF500AF159F /* GuideController.swift */,
+				59A8157321E231C9009E860E /* EduLauncher.swift */,
+				59C3E2C821E25F3400B4EA56 /* MenuLauncher.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -229,6 +255,7 @@
 				594AFDE821DA3A5D00C6F897 /* Main.storyboard in Resources */,
 				5983585A21E1269200AF159F /* edu.json in Resources */,
 				5983585521E11D5000AF159F /* done.json in Resources */,
+				59C3E2D221E2873900B4EA56 /* loading.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,12 +269,18 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-compoundads/Pods-compoundads-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
 				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,11 +315,16 @@
 			files = (
 				59C5E34421DFED7F00C73AC2 /* FourProcentController.swift in Sources */,
 				59D4DFCF21DA3C9A00528750 /* Extension.swift in Sources */,
+				59C3E2D021E2768800B4EA56 /* PurchaseManager.swift in Sources */,
 				5983584E21E10BA000AF159F /* Page.swift in Sources */,
 				594AFDE521DA3A5D00C6F897 /* MainController.swift in Sources */,
 				594AFDE321DA3A5D00C6F897 /* AppDelegate.swift in Sources */,
+				59C3E2CB21E260D800B4EA56 /* MenuCell.swift in Sources */,
+				59C3E2CD21E2611900B4EA56 /* Menu.swift in Sources */,
 				5983583E21E0FBF500AF159F /* GuideController.swift in Sources */,
+				59A8157421E231C9009E860E /* EduLauncher.swift in Sources */,
 				59D4DFD821DA4D1400528750 /* Constants.swift in Sources */,
+				59C3E2C921E25F3400B4EA56 /* MenuLauncher.swift in Sources */,
 				5983584A21E1076100AF159F /* PageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
