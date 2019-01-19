@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 import Charts
-import GoogleMobileAds
 import Lottie
 
 class MainController: UIViewController, ChartViewDelegate {
@@ -245,7 +244,6 @@ class MainController: UIViewController, ChartViewDelegate {
     let titleView = UIView()
     
     var dataSetArray = [BarChartDataEntry]()
-    var bannerView: GADBannerView!
     
     lazy var eduLauncher: EduLauncher = {
         let eduLauncher = EduLauncher()
@@ -263,13 +261,8 @@ class MainController: UIViewController, ChartViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBannerAd()
         setupView()
         compound(principal: Double(principalSlider.value), rate: Double(yielSlider.value) / 100.0, time: Int(yearSlider.value), month: Double(monthlySlider.value))
-        
-        if !UserDefaults.standard.bool(forKey: firstTime) {
-            showGuide()
-        }
     }
     
     func showGuide() {
@@ -291,18 +284,6 @@ class MainController: UIViewController, ChartViewDelegate {
             present(activityController, animated: true, completion: nil)
         } else {
             present(activityController, animated: true, completion: nil)
-        }
-    }
-    
-    func setupBannerAd() {
-        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        bannerView.adUnitID = bannerAdID
-        bannerView.rootViewController = self
-        
-        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
-            bannerView.load(GADRequest())
-        } else {
-            return
         }
     }
     
@@ -329,7 +310,6 @@ class MainController: UIViewController, ChartViewDelegate {
                 break
             }
         }
-        
     }
     
     func compound(principal: Double, rate: Double, time: Int, month: Double) {
@@ -395,7 +375,7 @@ class MainController: UIViewController, ChartViewDelegate {
         _ = yielText.anchor(depositText.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: margin, leftConstant: margin, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = yiel.anchor(yielText.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         
-        _ = monthlySlider.anchor(nil, left: view.leftAnchor, bottom: bannerView.topAnchor, right: nil, topConstant: 0, leftConstant: margin, bottomConstant: margin, rightConstant: 0, widthConstant: margin * 8, heightConstant: 0)
+        _ = monthlySlider.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: nil, topConstant: 0, leftConstant: margin, bottomConstant: margin, rightConstant: 0, widthConstant: margin * 8, heightConstant: 0)
         _ = monthlyTitel.anchor(nil, left: monthlySlider.leftAnchor, bottom: monthlySlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = monthlyData.anchor(nil, left: nil, bottom: monthlySlider.topAnchor, right: monthlySlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
@@ -403,7 +383,7 @@ class MainController: UIViewController, ChartViewDelegate {
         _ = principalTitel.anchor(nil, left: principalSlider.leftAnchor, bottom: principalSlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = principalData.anchor(nil, left: nil, bottom: principalSlider.topAnchor, right: principalSlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
-        _ = yearSlider.anchor(nil, left: nil, bottom: bannerView.topAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin, rightConstant: margin, widthConstant: margin * 8, heightConstant: 0)
+        _ = yearSlider.anchor(nil, left: nil, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin, rightConstant: margin, widthConstant: margin * 8, heightConstant: 0)
         _ = yearTitel.anchor(nil, left: yearSlider.leftAnchor, bottom: yearSlider.topAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = yearData.anchor(nil, left: nil, bottom: yearSlider.topAnchor, right: yearSlider.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: margin / 2, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         
@@ -433,41 +413,15 @@ class MainController: UIViewController, ChartViewDelegate {
     @objc func showMenuLauncher() {
         menuLauncher.showMenu()
     }
-    
-    func handleIAP() {
-        
-        visualEffectView.isHidden = false
-        animation.isHidden = false
-        animation.play()
-        
-        var count = 0
-        
-        PurchaseManager.instance.purchaseRemoveAds { success in
-            if success {
-                self.bannerView.isHidden = true
-                self.animation.stop()
-                self.animation.isHidden = true
-                self.visualEffectView.isHidden = true
-            } else {
-                count += 1
-                if count == 2 {
-                    self.animation.stop()
-                    self.animation.isHidden = true
-                    self.visualEffectView.isHidden = true
-                    self.alertNotification(titel: "Unable to purchase \"Remove Ads\"", message: "The application was unable to complete the purchase of \"Remove Ads\". Please try again.")
-                }
-            }
-        }
-    }
 
     private func setupView() {
         view.backgroundColor = .white
         
-        [bannerView, barChart, totalAmountText, totalAmount, depositText, deposit, yielText, yiel, monthlySlider, monthlyTitel, monthlyData, principalSlider, principalTitel, principalData, yearSlider, yearTitel, yearData, yielSlider, yielTitel, yielData, visualEffectView, animation].forEach { view.addSubview($0) }
+        [barChart, totalAmountText, totalAmount, depositText, deposit, yielText, yiel, monthlySlider, monthlyTitel, monthlyData, principalSlider, principalTitel, principalData, yearSlider, yearTitel, yearData, yielSlider, yielTitel, yielData, visualEffectView, animation].forEach { view.addSubview($0) }
         
         [principalSlider, monthlySlider, yearSlider, yielSlider].forEach { $0.addTarget(self, action: #selector(sliderValueDidChange(_:event:)), for: .valueChanged) }
         
-        _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+//        _ = bannerView.anchor(nil, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         _ = visualEffectView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         animation.frame = CGRect(x: view.frame.width / 2 - 100, y: view.frame.height / 2 - 100, width: 200, height: 200)
         

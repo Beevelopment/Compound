@@ -26,11 +26,10 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
     
     let menus: [Menu] = {
         let first = Menu(imageName: "guide", titel: "Introduction")
-        let second = Menu(imageName: "ads", titel: "Remove Ads")
-        let third = Menu(imageName: "share", titel: "Share App")
-        let forth = Menu(imageName: "", titel: "Dismiss Menu")
+        let second = Menu(imageName: "share", titel: "Share App")
+        let third = Menu(imageName: "", titel: "Dismiss Menu")
         
-        return [first, second, third, forth]
+        return [first, second, third]
     }()
     
     let cellID = "cellID"
@@ -78,9 +77,6 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
             dismissMenuLauncher()
             mainController?.shareApplication()
         } else if index == menus.count - 3 {
-            dismissMenuLauncher()
-            mainController?.handleIAP()
-        } else if index == menus.count - 4 {
             dismissMenuLauncher()
             mainController?.showGuide()
         }

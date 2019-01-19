@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMobileAds
 import FBSDKCoreKit
 
 @UIApplicationMain
@@ -22,8 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window?.rootViewController = UINavigationController(rootViewController: MainController())
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: GILL_SANS, size: 21)!, NSAttributedString.Key.foregroundColor: mainColor], for: .normal)
-        
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-6662079405759550~6777147258")
         
         FBSDKApplicationDelegate.sharedInstance()?.application(application, didFinishLaunchingWithOptions: launchOptions)
         

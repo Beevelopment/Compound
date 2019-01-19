@@ -8,7 +8,6 @@
 
 import UIKit
 import Foundation
-import GoogleMobileAds
 
 class FourProcentController: UIViewController {
     
@@ -191,36 +190,10 @@ class FourProcentController: UIViewController {
         return eduLauncher
     }()
     
-    var bannerView: GADBannerView!
-    var interstitial: GADInterstitial!
-    
-    var adShown = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBannerAd()
-        setupInterstitialAd()
         setupView()
         setupNavbar()
-    }
-    
-    func setupBannerAd() {
-        bannerView = GADBannerView(adSize: kGADAdSizeBanner)
-        bannerView.adUnitID = bannerAdID
-        bannerView.rootViewController = self
-        
-        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
-            bannerView.load(GADRequest())
-        }
-    }
-    
-    func setupInterstitialAd() {
-        interstitial = GADInterstitial(adUnitID: interstitalAdID)
-        let request = GADRequest()
-        
-        if !UserDefaults.standard.bool(forKey: IAP_REMOVEADS) {
-            interstitial.load(request)
-        }
     }
     
     @objc func sliderChangedValue(_ sender: UISlider, event: UIEvent) {
@@ -234,15 +207,6 @@ class FourProcentController: UIViewController {
         
         if let touchEvent = event.allTouches?.first {
             switch touchEvent.phase {
-            case .began:
-                if !adShown {
-                    if interstitial.isReady {
-                        interstitial.present(fromRootViewController: self)
-                        adShown = true
-                    } else {
-                        return
-                    }
-                }
             case .moved:
                 if sender.tag == 0 {
                     monthlyIncomeData.text = "\(Int(incomeValue))"
@@ -310,7 +274,7 @@ class FourProcentController: UIViewController {
         [monthlyIncomeSlider, monthlyIncomeTitel, monthlyIncomeData, monthlyDepositSlider, monthlyDepositTitel, monthlyDepositData, yielSlider, yielTitel, yielData, principalSlider, principalTitel, principalData].forEach { middleElementContainer.addSubview($0) }
         
         bottomContainer.addSubview(bottomElementContainer)
-        [numberOfYearsText, numberOfYears, bannerView].forEach { bottomElementContainer.addSubview($0) }
+        [numberOfYearsText, numberOfYears].forEach { bottomElementContainer.addSubview($0) }
         
         _ = topContainer.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: heightContainer)
         _ = topElementContainer.anchor(topContainer.topAnchor, left: topContainer.leftAnchor, bottom: nil, right: topContainer.rightAnchor, topConstant: containerMargin * 43, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
@@ -340,7 +304,6 @@ class FourProcentController: UIViewController {
         _ = bottomElementContainer.anchor(bottomContainer.topAnchor, left: bottomContainer.leftAnchor, bottom: nil, right: bottomContainer.rightAnchor, topConstant: containerMargin * 20, leftConstant: margin, bottomConstant: 0, rightConstant: margin, widthConstant: 0, heightConstant: 0)
         _ = numberOfYearsText.anchor(bottomElementContainer.topAnchor, left: bottomElementContainer.leftAnchor, bottom: nil, right: bottomElementContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
         _ = numberOfYears.anchor(numberOfYearsText.bottomAnchor, left: bottomElementContainer.leftAnchor, bottom: bottomElementContainer.bottomAnchor, right: bottomElementContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        _ = bannerView.anchor(nil, left: bottomContainer.leftAnchor, bottom: bottomContainer.safeAreaLayoutGuide.bottomAnchor, right: bottomContainer.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         
         [monthlyDepositSlider, monthlyIncomeSlider, yielSlider, principalSlider].forEach { $0.addTarget(self, action: #selector(sliderChangedValue(_:event:)), for: .valueChanged) }
     }
